@@ -1,15 +1,11 @@
 package org.example;
 
 import com.github.sarxos.webcam.Webcam;
-import com.google.zxing.*;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.common.HybridBinarizer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.util.Optional;
 
 public class BarcodeReader implements Runnable {
     private final Webcam webcam;
@@ -30,10 +26,7 @@ public class BarcodeReader implements Runnable {
         this.webcam.open();
         while(this.window.isShowing()) loop();
         this.webcam.close();
-        System.out.println("webcam closed");
     }
-
-
 
     private void loop() {
         BufferedImage image = this.webcam.getImage();
@@ -44,11 +37,7 @@ public class BarcodeReader implements Runnable {
                 0,
                 null
         );
-        LuminanceSource source = new BufferedImageLuminanceSource(image);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-
-        // decode the qr code and display the output in the console.
-        String result = BitmapDecoder.decode(bitmap).orElse("");
-        if(!result.equals("")) System.out.println(result);
+        String result = BitmapDecoder.decode(ImageToBitmapConverter.convert(image)).orElse("");
+        if(!result.isEmpty()) System.out.println(result);
     }
 }

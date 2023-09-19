@@ -30,10 +30,7 @@ public class BarcodeReader implements Runnable {
         this.webcam.open();
         while(this.window.isShowing()) loop();
         this.webcam.close();
-        System.out.println("webcam closed");
     }
-
-
 
     private void loop() {
         BufferedImage image = this.webcam.getImage();
@@ -44,11 +41,7 @@ public class BarcodeReader implements Runnable {
                 0,
                 null
         );
-        LuminanceSource source = new BufferedImageLuminanceSource(image);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-
-        // decode the qr code and display the output in the console.
-        String result = BitmapDecoder.decode(bitmap).orElse("");
+        String result = BitmapDecoder.decode(ImageToBitmapConverter.convert(image)).orElse("");
         if(!result.equals("")) System.out.println(result);
     }
 }
